@@ -7,15 +7,35 @@
 
 #include "life.h"
 #include <time.h>
+#include <stdlib.h>
+#include <fstream>
+
 //Generate the life matrix any way you want. We would highly recommend that you print the generated
 //matrix into a file, so that you can share it with other teams for checking correctness.
 void genlife(int *a, unsigned int n)
 {
+	for(unsigned i = 0; i < n*n; i++){
+		a[i] = rand() % 2;
+	}
 }
 
 //Read the life matrix from a file
 void readlife(int *a, unsigned int n, char *filename)
 {
+	std::ifstream file;
+	file.open(filename);
+
+	if (!file.is_open()) {
+		printf("readlife() failed to open file .. Exiting\n");
+		exit(-1);
+	}
+
+	int word;
+	for(unsigned i = 0; i < n*n; i++){
+		file >> word;
+		a[i] = word;
+	}
+	file.close();
 }
 
 //Life function
