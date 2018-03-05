@@ -1,7 +1,7 @@
 /**
  * Assignment 5: Life in Cilk
- * Team Member 1 Name:
- * Team Member 2 Name: 
+ * Team Member 1 Name: Karl Wang
+ * Team Member 2 Name: Wilson Mui
  *
  */
 
@@ -14,14 +14,18 @@
 //matrix into a file, so that you can share it with other teams for checking correctness.
 void genlife(int *a, unsigned int n)
 {
-	for(unsigned i = 0; i < n*n; i++){
-		a[i] = rand() % 2;
+    int i=0;
+    printf("genlife started... \n");
+	for(i = 0; i < n*n; i++){
+		a[i*sizeof(int)] = rand() % 2;
+        printf("%d", a[i*sizeof(int)]);
 	}
 }
 
 //Read the life matrix from a file
 void readlife(int *a, unsigned int n, char *filename)
 {
+    /*
 	std::ifstream file;
 	file.open(filename);
 
@@ -36,6 +40,14 @@ void readlife(int *a, unsigned int n, char *filename)
 		a[i] = word;
 	}
 	file.close();
+     */
+    
+    FILE *fp = fopen(filename, "r");
+    for(int i = 0; i < n*n; i++)
+    {
+        fscanf(fp, "%d", &a[i]);
+    }
+    fclose(fp);
 }
 
 unsigned getNeighborCount(const int *a, const unsigned int n, const unsigned int i, const unsigned int j){
@@ -49,10 +61,12 @@ unsigned getNeighborCount(const int *a, const unsigned int n, const unsigned int
 		 + a[di*n + lj] + a[di*n +  j] + a[di*n + rj];
 }
 
+
 //Life function
+//note the way the game is stored. Divide by rows to minimize cache misses.
 void life(int *a, unsigned int n, unsigned int iter, int *livecount)
 {
-    // You need to store the total number of livecounts for every 1/0th of the total iterations into the livecount array.
+    // You need to store the total number of livecounts for every 1/10th of the total iterations into the livecount array.
 	// For example, if there are 50 iterations in your code, you need to store the livecount for iteration number 5 10 15
 	// 20 ... 50. The countlive function is defined in life.cpp, which you can use. Note that you can
 	// do the debugging only if the number of iterations is a multiple of 10.
@@ -80,7 +94,7 @@ void life(int *a, unsigned int n, unsigned int iter, int *livecount)
 		//use b as the result grid; calloc'ed to all 0s
 		int *b = (int *)calloc(n*n, sizeof(int));
 
-		for(unsigned i = 0; i < n; i++){
+		cilk_for(unsigned i = 0; i < n; i++){
 			for(unsigned j = 0; j < n; j++){
 				unsigned neighborCount = getNeighborCount(a, n, i, j);
 
