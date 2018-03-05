@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <fstream>
 
+#define DEBUG 1
+
 //Generate the life matrix any way you want. We would highly recommend that you print the generated
 //matrix into a file, so that you can share it with other teams for checking correctness.
 void genlife(int *a, unsigned int n)
@@ -103,8 +105,8 @@ void life(int *a, unsigned int n, unsigned int iter, int *livecount)
 			}
 		}
         
-        printf("%d", countlive(a,n));
-        printf("\n");
+        //printf("%d", countlive(a,n));
+        //printf("\n");
 
 		//a will not be used again
 		free(a);
@@ -112,14 +114,15 @@ void life(int *a, unsigned int n, unsigned int iter, int *livecount)
 		a = b;
 
 		#if DEBUG == 1
+        
 			int period = (iter/10);					//the collection period						e.g. period = 55 / 10 = 5
 			if(iter >= 10 							//if there is at least 10 iteration			e.g. 55 >= 10 == true, 
 				&& (currIter + 1) % period == 0 	//if it is right at the end of a period		e.g. (4 + 1) % 5 == 0, (49 + 1) % 5 == 0
 				&& currIter / period < 10){			//if it is among the first 10 period		e.g. 49 / 5 < 10 == true, 54 / 5 < 10 == false
 
 				livecount[currIter / period] = countlive(a, n);
+ 
 			}
-		#endif
-
+        #endif
 	}
 }
