@@ -17,15 +17,15 @@ void genlife(int *a, unsigned int n)
     int i=0;
     printf("genlife started... \n");
 	for(i = 0; i < n*n; i++){
-		a[i*sizeof(int)] = rand() % 2;
-        printf("%d", a[i*sizeof(int)]);
+		a[i] = rand() % 2;
+        //printf("%d", a[i]);
 	}
 }
 
 //Read the life matrix from a file
 void readlife(int *a, unsigned int n, char *filename)
 {
-    /*
+    
 	std::ifstream file;
 	file.open(filename);
 
@@ -40,14 +40,7 @@ void readlife(int *a, unsigned int n, char *filename)
 		a[i] = word;
 	}
 	file.close();
-     */
-    
-    FILE *fp = fopen(filename, "r");
-    for(int i = 0; i < n*n; i++)
-    {
-        fscanf(fp, "%d", &a[i]);
-    }
-    fclose(fp);
+
 }
 
 unsigned getNeighborCount(const int *a, const unsigned int n, const unsigned int i, const unsigned int j){
@@ -55,6 +48,12 @@ unsigned getNeighborCount(const int *a, const unsigned int n, const unsigned int
 	unsigned di = (i == n-1) ? 0 : i+1;
 	unsigned lj = (j == 0) ? n-1 : j-1;
 	unsigned rj = (j == n-1) ? 0 : j+1;
+    
+    /*
+    printf("%d", a[ui*n + lj] + a[ui*n +  j] + a[ui*n + rj]
+           + a[ i*n + lj] + a[ i*n + rj]
+           + a[di*n + lj] + a[di*n +  j] + a[di*n + rj]);
+     */
 
 	return a[ui*n + lj] + a[ui*n +  j] + a[ui*n + rj]
 		 + a[ i*n + lj] + 			     a[ i*n + rj]
@@ -103,6 +102,9 @@ void life(int *a, unsigned int n, unsigned int iter, int *livecount)
 				} //otherwise it is 0, but there is no need to set it as it is calloc'ed
 			}
 		}
+        
+        printf("%d", countlive(a,n));
+        printf("\n");
 
 		//a will not be used again
 		free(a);
