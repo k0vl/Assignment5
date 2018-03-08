@@ -2,7 +2,6 @@
 #include "life.h"
 
 // Debugging flag. Set to 0 during performance evaluation
-#define DEBUG 1
 int *livecount;
 
 using namespace std;
@@ -26,7 +25,7 @@ int main(int argc, char **argv)
 	// Read from file
 	if(argv[1][0] == 'r')
 	{
-        printf("reading from file \n");
+        //printf("reading from file \n");
         
 		n = (unsigned int)atoi(argv[3]);
 		iter = (unsigned int)atoi(argv[4]);
@@ -69,10 +68,12 @@ int main(int argc, char **argv)
 			livecount[i] = 0;
 	#endif
 
+    /*
     printf("initial living: ");
     printf("%d", countlive(a, n));
     printf("\n");
-    
+  */
+     
 	life(a,n,iter,livecount);
 
 	// Print the livecount array

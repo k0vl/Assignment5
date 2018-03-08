@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <fstream>
 
-#define DEBUG 1
+
 
 //Generate the life matrix any way you want. We would highly recommend that you print the generated
 //matrix into a file, so that you can share it with other teams for checking correctness.
@@ -31,6 +31,7 @@ void readlife(int *a, unsigned int n, char *filename)
 	std::ifstream file;
 	file.open(filename);
 
+    
 	if (!file.is_open()) {
 		printf("readlife() failed to open file .. Exiting\n");
 		exit(-1);
@@ -95,7 +96,7 @@ void life(int *a, unsigned int n, unsigned int iter, int *livecount)
 		//use b as the result grid; calloc'ed to all 0s
 		int *b = (int *)calloc(n*n, sizeof(int));
 
-		cilk_for(unsigned i = 0; i < n; i++){
+		for(unsigned i = 0; i < n; i++){
 			for(unsigned j = 0; j < n; j++){
 				unsigned neighborCount = getNeighborCount(a, n, i, j);
 
@@ -107,12 +108,10 @@ void life(int *a, unsigned int n, unsigned int iter, int *livecount)
         
         //printf("%d", countlive(a,n));
         //printf("\n");
-
-		//a will not be used again
-		free(a);
-		//swap a and b
-		a = b;
-
+        //a will not be used again
+        free(a);
+        //swap a and b
+        a = b;
 		#if DEBUG == 1
         
 			int period = (iter/10);					//the collection period						e.g. period = 55 / 10 = 5
@@ -124,5 +123,8 @@ void life(int *a, unsigned int n, unsigned int iter, int *livecount)
  
 			}
         #endif
+        
+        
+        
 	}
 }
